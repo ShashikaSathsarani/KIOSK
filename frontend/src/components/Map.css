@@ -1,0 +1,9 @@
+#map { 
+    height: "740px"; 
+    width: "840px" 
+}
+
+.st4 {
+    pointer-events: all;
+    cursor: pointer;
+}

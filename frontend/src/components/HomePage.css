@@ -1,0 +1,146 @@
+.home-page {
+  background: none;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+/*  Fullscreen slideshow */
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* full screen height */
+  overflow: hidden;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* show full image proportionally */
+}
+
+/* Logo top-left */
+.overlay-logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 80px;
+  width: auto;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 6px;
+}
+
+/* ✅ Caption bottom-left */
+.slide-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* ✅ Right-aligned title for first slide */
+.first-slide-title {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  text-align: right;
+  color: #ffffff;
+  font-size: 2.2rem;
+  font-weight: bold;
+  line-height: 1.4;
+  padding: 20px 20px;
+  background: rgba(0, 0, 0, 0.6); /* semi-transparent background */
+  border-radius: 10px;
+  max-width: 400px;
+  opacity: 0; /* start hidden */
+}
+
+/* Separate styling for two lines */
+.faculty-line {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff; 
+}
+
+.university-line {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #ffffff; 
+}
+
+/* ✅ Fade-in from right */
+.fade-in-right {
+  animation: slideInRight 1.5s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translate(50px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
+
+/* ✅ Full-width, eye-catching description overlay */
+.description-box {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 2rem 3rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+  color: #fff;
+  text-align: center;
+  backdrop-filter: blur(5px);
+  animation: fadeInUp 1.5s ease forwards;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+
+.description-box p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+}
+
+/* Fade-in from bottom animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ✅ Responsiveness */
+@media (max-height: 700px) {
+  .slideshow-container {
+    height: 100vh;
+    
+  }
+}
+
+@media (max-width: 768px) {
+  .description-box {
+    padding: 1.5rem 1.5rem;
+  }
+
+  .description-box p {
+    font-size: 1rem;
+  }
+}

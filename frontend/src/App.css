@@ -1,0 +1,149 @@
+/* App.css - Enhanced glassmorphism theme with new color palette */
+.app {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #1E293B 0%, #334155 50%, #1E293B 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 16px;
+}
+
+/* Enhanced background pattern overlay */
+.app::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, transparent 100%);
+  z-index: 0;
+}
+
+/* Logo */
+/* .app-logo {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+} */
+
+/* Enhanced Content Wrapper */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 220px;
+  margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: calc(100vh - 60px);
+}
+
+/* Enhanced Page Container with Slate Blue-Gray */
+.page-container {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  background: rgba(51, 65, 85, 0.3);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  /* border: 2px solid rgba(56, 189, 248, 0.5); */
+  margin-bottom: 20px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 20px 40px rgba(0, 0, 0, 0.15);
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced Custom scrollbar */
+.page-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.page-container::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+}
+
+.page-container::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.6);
+  border-radius: 4px;
+}
+
+.page-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.8);
+}
+
+/* Enhanced animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Glass effect utility class
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 5px solid rgba(5, 127, 250, 0.964);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+} */
+
+/* Enhanced button styles */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content-wrapper {
+    margin-left: 190px;
+    margin-right: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
+

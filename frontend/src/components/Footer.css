@@ -1,0 +1,22 @@
+/* ===== FOOTER STYLES ===== */
+.app-footer {
+  margin-top: auto;
+  padding: 5px 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-content p {
+  margin: 5px 0;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.footer-content p:first-child {
+  font-weight: 400;
+}
