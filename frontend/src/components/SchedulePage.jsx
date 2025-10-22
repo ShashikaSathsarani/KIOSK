@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-//import { getAllEvents, getEventsWithinHour, formatEventForDisplay } from '../eventService'
+import { getAllEvents, getEventsWithinHour, formatEventForDisplay } from '../eventService'
 import './SchedulePage.css'
 
 const SchedulePage = () => {
