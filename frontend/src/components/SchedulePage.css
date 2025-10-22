@@ -3,7 +3,7 @@
   min-height: 100vh;
   padding: 2rem;
   box-sizing: border-box;
-  background: #1e293b;
+  background: transparent;
   color: white;
   font-family: sans-serif;
 }
@@ -129,9 +129,26 @@
   color: white;
 }
 
+.event-description {
+  color: #f8f3f6;  /* Light sky blue */
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 90%;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  text-shadow: 0 0 20px rgba(125, 211, 252, 0.3);
+  transition: color 0.3s ease;
+}
+
+.event-card:hover .event-description {
+  color: #38bdf8;  /* Brighter blue on hover */
+}
+
 .duration {
   color: #94a3b8;
   margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
 .event-meta {
@@ -187,7 +204,7 @@
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
 }
-}
+
 
 .status-badge {
   position: absolute;

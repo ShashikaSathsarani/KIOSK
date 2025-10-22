@@ -71,10 +71,11 @@ const SchedulePage = () => {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim()
       filtered = filtered.filter(ev =>
-        ev.event_title.toLowerCase().includes(q) ||
-        ev.location.toLowerCase().includes(q) ||
-        ev.start_time.toLowerCase().includes(q) ||
-        ev.end_time.toLowerCase().includes(q)
+        (ev.event_title || '').toLowerCase().includes(q) ||
+        (ev.location || '').toLowerCase().includes(q) ||
+        (ev.description || '').toLowerCase().includes(q) ||
+        (ev.start_time || '').toLowerCase().includes(q) ||
+        (ev.end_time || '').toLowerCase().includes(q)
       )
     }
 
@@ -90,9 +91,9 @@ const SchedulePage = () => {
 
   const statusColor = (status) => {
     switch (status) {
-      case 'ongoing': return "#10b981"
-      case 'upcoming': return "#3b82f6"
-      case 'completed': return "#6b7280"
+      case 'ongoing': return "#22c55e"  // Bright green
+      case 'upcoming': return "#dc2626"  // Red
+      case 'completed': return "#6b7280" // Gray
       default: return "#6b7280"
     }
   }
@@ -163,6 +164,11 @@ const SchedulePage = () => {
                   </div>
                   <div className="event-info">
                     <h3>{highlight(event.event_title || event.title, searchQuery)}</h3>
+                    {event.description && (
+                      <p className="event-description">
+                        {highlight(event.description, searchQuery)}
+                      </p>
+                    )}
                     <p className="duration">Duration: {highlight(formatDuration(event.start_time, event.end_time), searchQuery)}</p>
 
                     <div className="event-meta">
