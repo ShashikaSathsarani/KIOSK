@@ -10,6 +10,7 @@ const SchedulePage = () => {
   const [error, setError] = useState(null)
   const [searchResults, setSearchResults] = useState(0)
   const [filterStatus, setFilterStatus] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState('all')
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -52,6 +53,14 @@ const SchedulePage = () => {
     )
   }
 
+  const getUniqueCategories = () => {
+    const categories = new Set()
+    allEvents.forEach(ev=>{
+      if(ev.category_name) categories.add(ev.category_name)
+    })
+    return Array.from(categories)
+  }
+
   const clearSearch = () => setSearchQuery('')
 
   const getDisplayEvents = () => {
@@ -74,9 +83,19 @@ const SchedulePage = () => {
       )
     }
 
-    if (filterStatus !== 'all') filtered = filtered.filter(ev => getEventStatus(ev) === filterStatus)
+    if (selectedCategory !== 'all') {
+    filtered = filtered.filter(ev => ev.category_name === selectedCategory)
+    }
+
+    //  Status filter
+    if (filterStatus !== 'all') {
+      filtered = filtered.filter(ev => getEventStatus(ev) === filterStatus)
+    }
+
+    // Sort by status
     return filtered.slice().sort((a, b) => getStatusOrder(a) - getStatusOrder(b))
   }
+
 
   const displayEvents = getDisplayEvents()
 
@@ -109,14 +128,29 @@ const SchedulePage = () => {
           <h1>{searchQuery ? 'Event Search Results' : 'Events Schedule'}</h1>
           <p>Complete schedule of all events</p>
 
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Search by title, location, or description..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-            />
-            {searchQuery && <button className="clear-btn" onClick={clearSearch}>✕</button>}
+          <div className= "search-and-filter">
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Search by title or location ..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && <button className="clear-btn" onClick={clearSearch}>✕</button>}
+            </div>
+
+            <div className="category-filter">
+              <label>Category:</label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="all">All</option>
+                {getUniqueCategories().map((cat, index) => (
+                  <option key={index} value={cat}>{cat} </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {searchQuery && (
