@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getAllEvents, getEventsWithinHour, formatEventForDisplay } from '../eventService.js'
+// @ts-ignore
+import { getAllEvents } from '../utils/eventService'
 import './SchedulePage.css'
 
 const SchedulePage = () => {
@@ -12,22 +13,18 @@ const SchedulePage = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      setLoading(true)
-      setError(null)
-
-      const response = await getAllEvents()
-
-      if (response.success && Array.isArray(response.data) && response.data.length > 0) {
-        setAllEvents(response.data)
-      } else if (response.success && Array.isArray(response.data) && response.data.length === 0) {
-        setError('No events found')
-      } else {
-        setError('Failed to fetch events: ' + response.error)
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await getAllEvents()
+        if (data && data.length > 0) setAllEvents(data)
+        else setError('No events found')
+      } catch (err) {
+        setError('Failed to fetch events: ' + err.message)
+      } finally {
+        setLoading(false)
       }
-
-      setLoading(false)
     }
-
     fetchEvents()
     const interval = setInterval(fetchEvents, 60000)
     return () => clearInterval(interval)
@@ -67,15 +64,13 @@ const SchedulePage = () => {
     }
 
     let filtered = allEvents
-
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim()
       filtered = filtered.filter(ev =>
-        (ev.event_title || '').toLowerCase().includes(q) ||
-        (ev.location || '').toLowerCase().includes(q) ||
-        (ev.description || '').toLowerCase().includes(q) ||
-        (ev.start_time || '').toLowerCase().includes(q) ||
-        (ev.end_time || '').toLowerCase().includes(q)
+        ev.event_title.toLowerCase().includes(q) ||
+        ev.location.toLowerCase().includes(q) ||
+        ev.start_time.toLowerCase().includes(q) ||
+        ev.end_time.toLowerCase().includes(q)
       )
     }
 
@@ -91,10 +86,10 @@ const SchedulePage = () => {
 
   const statusColor = (status) => {
     switch (status) {
-      case 'ongoing': return "#22c55e"  // Bright green
-      case 'upcoming': return "#dc2626"  // Red
-      case 'completed': return "#6b7280" // Gray
-      default: return "#6b7280"
+      case 'ongoing': return "green"
+      case 'upcoming': return "red"
+      case 'completed': return "gray"
+      default: return "gray"
     }
   }
 
@@ -117,7 +112,7 @@ const SchedulePage = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="Search by title, location, or time..."
+              placeholder="Search by title, location, or description..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
             />
@@ -137,7 +132,7 @@ const SchedulePage = () => {
             {['all', 'ongoing', 'upcoming', 'completed'].map(s => (
               <button
                 key={s}
-                className={`filter-btn ${filterStatus === s ? 'active' : ''}`}
+                className={filterStatus === s ? 'active' : ''}
                 onClick={() => setFilterStatus(s)}
               >
                 {s === 'all' ? 'All Events' : s.charAt(0).toUpperCase() + s.slice(1)}
@@ -163,22 +158,20 @@ const SchedulePage = () => {
                     {statusText(status)}
                   </div>
                   <div className="event-info">
-                    <h3>{highlight(event.event_title || event.title, searchQuery)}</h3>
-                    {event.description && (
-                      <p className="event-description">
-                        {highlight(event.description, searchQuery)}
-                      </p>
-                    )}
-                    <p className="duration">Duration: {highlight(formatDuration(event.start_time, event.end_time), searchQuery)}</p>
+                    <h3>{highlight(event.event_title, searchQuery)}</h3>
+                    <p>{highlight(event.description || '', searchQuery)}</p> 
+                    <p>Category: {highlight(event.category_name || 'N/A', searchQuery)}</p>
+                    <p>Duration: {highlight(formatDuration(event.start_time, event.end_time), searchQuery)}</p>
+                  
 
                     <div className="event-meta">
-                      <div className="meta-item">
-                        <span className="meta-label">Location</span>
-                        <span className="meta-value">{highlight(event.location || event.venue, searchQuery)}</span>
+                      <div>
+                        <span>Location</span>
+                        <span>{highlight(event.location, searchQuery)}</span>
                       </div>
-                      <div className="meta-item">
-                        <span className="meta-label">Start Time</span>
-                        <span className="meta-value">{highlight(formatTime(event.start_time), searchQuery)}</span>
+                      <div>
+                        <span>Start Time</span>
+                        <span>{highlight(formatTime(event.start_time), searchQuery)}</span>
                       </div>
                     </div>
                   </div>
@@ -188,7 +181,7 @@ const SchedulePage = () => {
           ) : (
             <div className="message">
               {searchQuery
-                ? <button className="show-all-btn" onClick={clearSearch}>Show All Events</button>
+                ? <button onClick={clearSearch}>Show All Events</button>
                 : "No events are currently scheduled. Check back later!"}
             </div>
           )}
