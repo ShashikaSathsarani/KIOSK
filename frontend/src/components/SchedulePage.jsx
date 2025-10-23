@@ -1,99 +1,106 @@
-import { useState, useEffect } from 'react';
-import { getAllEvents, formatEventForDisplay } from '../eventService.js';
-import './SchedulePage.css';
+import { useState, useEffect } from 'react'
+// @ts-ignore
+import { getAllEvents } from '../utils/eventService'
+import './SchedulePage.css'
 
 const SchedulePage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [allEvents, setAllEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchResults, setSearchResults] = useState(0);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('')
+  const [allEvents, setAllEvents] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchResults, setSearchResults] = useState(0)
+  const [filterStatus, setFilterStatus] = useState('all')
 
   useEffect(() => {
     const fetchEvents = async () => {
-      setLoading(true);
-      setError(null);
-      const response = await getAllEvents();
-
-      if (response.success && Array.isArray(response.data)) {
-        const formatted = response.data.map(formatEventForDisplay);
-        setAllEvents(formatted);
-      } else if (response.success) {
-        setAllEvents([]);
-        setError('No events found');
-      } else {
-        setAllEvents([]);
-        setError('Failed to fetch events: ' + response.error);
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await getAllEvents()
+        if (data && data.length > 0) setAllEvents(data)
+        else setError('No events found')
+      } catch (err) {
+        setError('Failed to fetch events: ' + err.message)
+      } finally {
+        setLoading(false)
       }
-      setLoading(false);
-    };
+    }
+    fetchEvents()
+    const interval = setInterval(fetchEvents, 60000)
+    return () => clearInterval(interval)
+  }, [])
 
-    fetchEvents();
-    const interval = setInterval(fetchEvents, 60000); // Refresh every 1 min
-    return () => clearInterval(interval);
-  }, []);
+  const getEventStatus = (event) => {
+    const now = new Date()
+    const start = new Date(event.start_time)
+    const end = new Date(event.end_time)
+    if (now >= end) return 'completed'
+    if (now >= start && now < end) return 'ongoing'
+    return 'upcoming'
+  }
 
-  const formatDuration = (time, duration) => `${time} (${duration})`;
+  const formatTime = (dateTimeString) =>
+    new Date(dateTimeString).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+
+  const formatDuration = (start, end) => `${formatTime(start)} - ${formatTime(end)}`
 
   const highlight = (text, term) => {
-    if (!term || !term.trim()) return text;
-    const safe = String(text);
-    const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    return safe.split(regex).map((part, idx) =>
+    if (!term.trim()) return text
+    const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    return text.split(regex).map((part, idx) =>
       regex.test(part) ? <span key={idx} className="highlight">{part}</span> : part
-    );
-  };
+    )
+  }
 
-  const clearSearch = () => setSearchQuery('');
+  const clearSearch = () => setSearchQuery('')
 
   const getDisplayEvents = () => {
     const getStatusOrder = (event) => {
-      if (event.status === 'ongoing') return 0;
-      if (event.status === 'upcoming') return 1;
-      if (event.status === 'completed') return 2;
-      return 3;
-    };
-
-    let filtered = allEvents.slice();
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(ev =>
-        (ev.title || '').toLowerCase().includes(q) ||
-        (ev.venue || '').toLowerCase().includes(q) ||
-        (ev.category || '').toLowerCase().includes(q)
-      );
+      const status = getEventStatus(event)
+      if (status === 'ongoing') return 0
+      if (status === 'upcoming') return 1
+      if (status === 'completed') return 2
+      return 3
     }
 
-    if (filterStatus !== 'all') filtered = filtered.filter(ev => ev.status === filterStatus);
-    return filtered.sort((a, b) => getStatusOrder(a) - getStatusOrder(b));
-  };
+    let filtered = allEvents
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim()
+      filtered = filtered.filter(ev =>
+        ev.event_title.toLowerCase().includes(q) ||
+        ev.location.toLowerCase().includes(q) ||
+        ev.start_time.toLowerCase().includes(q) ||
+        ev.end_time.toLowerCase().includes(q)
+      )
+    }
 
-  const displayEvents = getDisplayEvents();
+    if (filterStatus !== 'all') filtered = filtered.filter(ev => getEventStatus(ev) === filterStatus)
+    return filtered.slice().sort((a, b) => getStatusOrder(a) - getStatusOrder(b))
+  }
+
+  const displayEvents = getDisplayEvents()
 
   useEffect(() => {
-    if (searchQuery.trim()) setSearchResults(displayEvents.length);
-    else setSearchResults(0);
-  }, [searchQuery, displayEvents.length]);
+    if (searchQuery.trim()) setSearchResults(displayEvents.length)
+  }, [searchQuery, displayEvents.length])
 
   const statusColor = (status) => {
     switch (status) {
-      case 'ongoing': return "#10b981";
-      case 'upcoming': return "#3b82f6";
-      case 'completed': return "#6b7280";
-      default: return "#6b7280";
+      case 'ongoing': return "green"
+      case 'upcoming': return "red"
+      case 'completed': return "gray"
+      default: return "gray"
     }
-  };
+  }
 
   const statusText = (status) => {
     switch (status) {
-      case 'ongoing': return "ONGOING";
-      case 'upcoming': return "UPCOMING";
-      case 'completed': return "COMPLETED";
-      default: return "UNKNOWN";
+      case 'ongoing': return "ONGOING"
+      case 'upcoming': return "UPCOMING"
+      case 'completed': return "COMPLETED"
+      default: return "UNKNOWN"
     }
-  };
+  }
 
   return (
     <div className="schedule-page">
@@ -105,7 +112,7 @@ const SchedulePage = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="Search by title, location, or category..."
+              placeholder="Search by title, location, or description..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
             />
@@ -125,7 +132,7 @@ const SchedulePage = () => {
             {['all', 'ongoing', 'upcoming', 'completed'].map(s => (
               <button
                 key={s}
-                className={`filter-btn ${filterStatus === s ? 'active' : ''}`}
+                className={filterStatus === s ? 'active' : ''}
                 onClick={() => setFilterStatus(s)}
               >
                 {s === 'all' ? 'All Events' : s.charAt(0).toUpperCase() + s.slice(1)}
@@ -143,36 +150,45 @@ const SchedulePage = () => {
               <button onClick={() => window.location.reload()}>Retry</button>
             </div>
           ) : displayEvents.length > 0 ? (
-            displayEvents.map((event, idx) => (
-              <div key={event.id ?? idx} className="event-card">
-                <div className="status-badge" style={{ backgroundColor: statusColor(event.status) }}>
-                  {statusText(event.status)}
-                </div>
-                <div className="event-info">
-                  <h3>{highlight(event.title || 'Untitled Event', searchQuery)}</h3>
-                  <p className="duration">Duration: {highlight(formatDuration(event.time || 'TBD', event.duration || '—'), searchQuery)}</p>
-                  <p className="category">Category: {highlight(event.category || 'General', searchQuery)}</p>
+            displayEvents.map((event, idx) => {
+              const status = getEventStatus(event)
+              return (
+                <div key={event.event_id || idx} className="event-card">
+                  <div className="status-badge" style={{ backgroundColor: statusColor(status) }}>
+                    {statusText(status)}
+                  </div>
+                  <div className="event-info">
+                    <h3>{highlight(event.event_title, searchQuery)}</h3>
+                    <p>{highlight(event.description || '', searchQuery)}</p> 
+                    <p>Category: {highlight(event.category_name || 'N/A', searchQuery)}</p>
+                    <p>Duration: {highlight(formatDuration(event.start_time, event.end_time), searchQuery)}</p>
+                  
 
-                  <div className="event-meta">
-                    <div className="meta-item">
-                      <span className="meta-label">Location</span>
-                      <span className="meta-value">{highlight(event.venue || 'TBD', searchQuery)}</span>
+                    <div className="event-meta">
+                      <div>
+                        <span>Location</span>
+                        <span>{highlight(event.location, searchQuery)}</span>
+                      </div>
+                      <div>
+                        <span>Start Time</span>
+                        <span>{highlight(formatTime(event.start_time), searchQuery)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              )
+            })
           ) : (
             <div className="message">
               {searchQuery
-                ? <button className="show-all-btn" onClick={clearSearch}>Show All Events</button>
+                ? <button onClick={clearSearch}>Show All Events</button>
                 : "No events are currently scheduled. Check back later!"}
             </div>
           )}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SchedulePage;
+export default SchedulePage
