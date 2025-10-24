@@ -193,7 +193,6 @@ const SchedulePage = () => {
                   </div>
                   <div className="event-info">
                     <h3>{highlight(event.event_title, searchQuery)}</h3>
-                    <p>{highlight(event.description || '', searchQuery)}</p> 
                     <p>Category: {highlight(event.category_name || 'N/A', searchQuery)}</p>
                     <p>Duration: {highlight(formatDuration(event.start_time, event.end_time), searchQuery)}</p>
                   
