@@ -1,6 +1,6 @@
 .schedule-page {
   width: 100%;
-  min-height: 100vh;
+  min-height: relative;
   padding: 2rem;
   box-sizing: border-box;
   background: #1e293b;
