@@ -1,6 +1,6 @@
 .schedule-page {
   width: 100%;
-  min-height: 100vh;
+  min-height: relative;
   padding: 2rem;
   box-sizing: border-box;
   background: #1e293b;
@@ -92,6 +92,7 @@
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
+  
 }
 
 .event-card {
@@ -100,7 +101,7 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(59,130,246,0.4);
   border-radius: 1rem;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
 }
 
 .status-badge {
@@ -168,5 +169,68 @@
   color: #facc15; /* yellow */
   font-weight: 600;
   margin-bottom: 6px;
+}
+
+/* Container for search bar + category dropdown */
+.search-and-filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap; /* Makes it responsive on small screens */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  max-width: 600px; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Search box styling (keep your existing ones if already present) */
+.search-box {
+  flex: 1;
+  position: relative;
+  
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: white;
+  color: white;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Category filter aligned to the right */
+.category-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-filter label {
+  font-weight: bold;
+  color: white;
+}
+
+.category-filter select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: #7486a0;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
