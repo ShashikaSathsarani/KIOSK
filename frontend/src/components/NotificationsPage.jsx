@@ -1,54 +1,50 @@
-import React, { useEffect, useRef, useState } from 'react'
-import './NotificationsPage.css';
+import React, { useEffect, useState } from "react";
+import "./NotificationsPage.css";
 
-const API_URL = 'http://localhost:3000/api/events/:id/status'; // API endpoint for fetching notifications
-
-function NotificationsPage() {
-  const [notifications, setNotifications] = useState([]); // State to hold fetched notifications
-  const [loading, setLoading] = useState(true); // State to track loading status
+const NotificationsPage = () => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let intervalId; // to store the polling interval
-
-    // Function to fetch notifications from backend
-    const fetchNotifications = async () => {
-      try {
-        setLoading(true); // show loading message
-        const response = await fetch(API_URL); // call API
-        const data = await response.json(); // parse response
-        setNotifications(data);  // update state
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-      } finally {
-        setLoading(false); // hide loading after fetch (success/failure)
-      }
+    // Function to fetch notifications
+    const fetchNotifications = () => {
+      fetch("http://localhost:4000/api/notifications")
+        .then((res) => res.json())
+        .then((data) => {
+          setNotifications(data);
+          setLoading(false);
+        })
+        .catch((err) => console.error(err));
     };
 
-    // Fetch once immediately
+    // Initial fetch
     fetchNotifications();
-    intervalId = setInterval(fetchNotifications, 5000); // // Set up polling every 5 seconds
-    return () => clearInterval(intervalId); // Cleanup: clear interval when component unmounts
-  }, []); // [] → run only once on mount
+
+    // Set interval to fetch every 5 seconds
+    const interval = setInterval(fetchNotifications, 5000);
+
+    // Clear interval on unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) return <div className="notifications-page">Loading...</div>;
 
   return (
-    <div className="notifications-container">
-      <h2>Live Notifications</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : notifications.length === 0 ? (
-        <p>No notifications available.</p>
-      ) : (
-        <ul className="notifications-list">
-          {notifications.map((note, idx) => (
-            <li key={idx} className="notification-item">
-              <span className="notification-time">{note.time}</span>
-              <span className="notification-message">{note.message}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="notifications-page">
+      <h2>Notifications</h2>
+      <ul>
+        {notifications.map((n) => (
+          <li key={n.id} className={`notification ${n.level}`}>
+            <div className="notif-header">
+              <h3>{n.title}</h3>
+              <small>{new Date(n.created_at).toLocaleString()}</small>
+            </div>
+            <p>{n.body}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default NotificationsPage;

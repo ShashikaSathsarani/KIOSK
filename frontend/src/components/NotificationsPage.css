@@ -1,35 +1,73 @@
-.notifications-container {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  margin: 2rem auto;
-  max-width: 600px;
-  color: #222;
-}
+.notifications-page {
+  padding: 40px 20px;
+  background: #123960; /* deep blue background */
+  color: white;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
 
-.notifications-list {
-  list-style: none;
-  padding: 0;
-}
-
-.notification-item {
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  padding: 1rem;
+  /* Center notifications nicely */
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  align-items: center;
 }
 
-.notification-time {
-  font-size: 0.85rem;
-  color: #888;
-  margin-bottom: 0.5rem;
+.notifications-page h2 {
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 3rem;
 }
 
-.notification-message {
+/* Notification card */
+.notification {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border-left: 5px solid #2196f3;
+  transition: all 0.25s ease;
+  width: 100%;
+  max-width: 1200px;   /* consistent width */
+  min-height: 120px;  /* equal height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Soft card shadow */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.notification:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Type colors */
+.notification.info { border-left-color: #2196f3; }
+.notification.warning { border-left-color: #ff9800; }
+.notification.error { border-left-color: #f44336; }
+
+/* Header styling */
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification h3 {
   font-size: 1.1rem;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+}
+
+.notification p {
+  font-size: 1.5rem;
+  margin: 5px 0;
+  flex-grow: 1;
+}
+
+.notification small {
+  opacity: 0.8;
+  font-size: 0.8rem;
+  text-align: right;
 }
