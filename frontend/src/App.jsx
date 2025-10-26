@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import HomePage from './components/HomePage'
 import AboutPage from './components/AboutPage'
 import SchedulePage from './components/SchedulePage'
@@ -10,7 +10,6 @@ import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import ExhibitsPage from './components/ExhibitsPage'
 import './App.css'
-import React, { StrictMode } from 'react'
 
 function App() {
   const [currentPage, setCurrentPage] = useState(0)
@@ -82,6 +81,21 @@ function App() {
   }, [showIntroVideo, handleUserActivity])
 
   const CurrentComponent = pages[currentPage]
+  // Contact info component (kept inside App to access currentPage)
+  const ContactInfo = ({ currentPage }) => {
+    if (currentPage === 0) return null
+
+    return (
+      <div className="contact-container">
+        <div className="contact-marquee">
+          <span className="contact-item">• University Security: +94 81 239 4914</span>
+          <span className="contact-item">• University Medical Center: +94 81 239 2361</span>
+          <span className="contact-item">• Event Coordinator: +94 81 239 3000</span>
+          <span className="contact-item">• Technical Support: +94 81 239 3001</span>
+        </div>
+      </div>
+    )
+  }
 
   // Show intro video if showIntroVideo is true
   if (showIntroVideo) {
@@ -103,6 +117,10 @@ function App() {
           <CurrentComponent />
         </div>
         
+        {/* Scrolling Contact Info - only show if NOT home page */}
+        <ContactInfo currentPage={currentPage} />
+
+
         {/* ===== FOOTER COMPONENT ===== */}
         <Footer />
       </div>

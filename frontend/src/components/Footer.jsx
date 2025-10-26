@@ -1,6 +1,5 @@
 import React from 'react'
-
-interface FooterTailwindProps {}
+import './Footer.css'
 
 /**
  * Footer Component - Tailwind Version
@@ -10,11 +9,11 @@ interface FooterTailwindProps {}
  * - System branding
  * - University attribution
  */
-const FooterTailwind: React.FC<FooterTailwindProps> = () => {
+const Footer = () => {
   return (
-    <div className="mt-auto py-1 bg-black/10 border-t border-white/10">
-      <div className="text-center text-white/80">
-        <p className="my-1 text-xs font-normal">
+    <div className="app-footer">
+      <div className="footer-content">
+        <p className="">
           © 2025 Faculty of Engineering, University of Peradeniya
         </p>
         <p className="my-1 text-xs font-light">
@@ -25,4 +24,4 @@ const FooterTailwind: React.FC<FooterTailwindProps> = () => {
   )
 }
 
-export default FooterTailwind
+export default Footer;

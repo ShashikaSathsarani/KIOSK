@@ -147,3 +147,32 @@
   }
 }
 
+.contact-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 0.5rem 0; /* py-2 */
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  color: #facc15; /* text-yellow-400 */
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: bold;
+  animation: marquee 30s linear infinite;
+}
+
+.contact-item {
+  margin: 0 2rem; /* mx-8 */
+}
+
+/* Scrolling animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
