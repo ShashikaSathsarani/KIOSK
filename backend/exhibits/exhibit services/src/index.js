@@ -31,6 +31,5 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Exhibit Service running on port ${PORT}`);
-});
+// Export the app for testing and for a separate server startup script
+export default app;

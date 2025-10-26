@@ -56,7 +56,7 @@ const ExhibitsPage = () => {
   // so exhibits that contain multiple tags will be shown when any
   // selected tag matches one of their tags.
   useEffect(() => {
-    const EXHIBITS_API_BASE = import.meta.env.VITE_EXHIBITS_API || 'http://localhost:5003/exhibits'
+    const EXHIBITS_API_BASE = import.meta.env.VITE_EXHIBITS_API || 'http://localhost:5020/exhibits'
 
     const fetchExhibits = async () => {
       try {

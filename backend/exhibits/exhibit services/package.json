@@ -1,11 +1,13 @@
 {
   "name": "exhibit-service",
+  "type": "module",
   "version": "0.0.1",
   "description": "Exhibit microservice",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testTimeout=10000"
   },
   "author": "",
   "license": "MIT",
@@ -16,6 +18,13 @@
     "pg": "^8.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "jest": "^30.2.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^7.1.4"
+  }
+  ,
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
   }
 }

@@ -6,7 +6,7 @@ import pool from '../../../db/db.js';
 const getExhibits = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT e.exhibit_ID, e.exhibit_name, b.building_name, z.zone_name, e.tags
+      `SELECT e.exhibit_ID, e.exhibit_name, b.building_name, b.location, z.zone_name, e.tags
        FROM exhibits e
        JOIN building b ON e.building_ID = b.building_ID
        JOIN zone z ON b.zone_ID = z.zone_ID
@@ -26,7 +26,7 @@ const getExhibitByTag = async (req, res) => {
   const { tag } = req.params;
   try {
     const result = await pool.query(
-      `SELECT e.exhibit_ID, e.exhibit_name, b.building_name, z.zone_name, e.tags
+      `SELECT e.exhibit_ID, e.exhibit_name, b.building_name, b.location, z.zone_name, e.tags
        FROM exhibits e
        JOIN building b ON e.building_ID = b.building_ID
        JOIN zone z ON b.zone_ID = z.zone_ID
