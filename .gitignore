@@ -5,6 +5,10 @@ node_modules/
 dist/
 build/
 
+# Vite dependency cache inside node_modules (explicit)
+node_modules/.vite/deps
+node_modules/.vite/**
+
 # Local env / IDE
 *.env
 .env
