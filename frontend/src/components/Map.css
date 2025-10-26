@@ -1,9 +1,14 @@
-#map { 
-    height: "740px"; 
-    width: "840px" 
+.map-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
 }
 
-.st4 {
-    pointer-events: all;
-    cursor: pointer;
+.map-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  
 }

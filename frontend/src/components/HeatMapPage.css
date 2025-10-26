@@ -1,34 +1,34 @@
  h2 {
-  font-size: 3rem;
-  font-family: 'Arial', sans-serif;
-  font-weight: 700;
-  background: white;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  padding: 2rem; 
+  background-color: transparent; 
+  border-radius: 1.5rem; 
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); 
+  backdrop-filter: blur(16px); 
+  border: 1px solid rgba(255, 255, 255, 0.18); 
+  max-width: 80rem; 
+  margin-left: auto; 
+  margin-right: auto; 
  }
 .heatmap-container {
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  max-width: 1600px;
-  margin: rem auto;
+  text-align: center;         
+  color: #ffffff;             
+  font-size: 2rem;         
+  line-height: 2rem;
+  font-weight: 700;           
+  margin-bottom: 2rem;        
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04))
+          drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1)); 
 }
 
 .heatmap-iframe-wrapper {
-  margin-top: 1.5rem;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+  margin-top: 1.5rem; 
+  border-radius: 1rem; 
+  overflow: hidden; 
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15); 
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
 }
 
 

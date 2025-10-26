@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import './Map.css';
 
-import {map, initMap, getRouteToNode, getRouteToBuilding, drawRoute, addBuildingClickListner, getGpsPosition, drawMarker } from "../utils/map_module";  
+import {map, initMap, getRouteToNode, getRouteToBuilding, drawRoute, addBuildingClickListner, getGpsPosition, drawMarker } from "./map_module";  
 
 function MapComponent() {
   const mapRef = useRef(null);
