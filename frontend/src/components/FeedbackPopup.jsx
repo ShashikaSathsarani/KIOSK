@@ -135,7 +135,7 @@ const FeedbackPopup = ({ showOnPages = true }) => {
               <div className="confirm-box">
                 <button className="confirm-close" onClick={closeConfirm} aria-label="Close">×</button>
                 <h4>No rating selected</h4>
-                <p className="confirm-desc">Please select a star rating before you submit. Tap a star to choose one.</p>
+                <p className="confirm-desc">Please select a star rating before you submit.</p>
               </div>
             </div>
           )}
