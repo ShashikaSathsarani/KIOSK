@@ -1,9 +1,8 @@
 .feedback-btn {
   position: fixed;
   top: 20px;
-  /* move left a bit so it doesn't overlap the chatbot bubble */
   right: 110px;
-  background-color: #1d6485ea; /* Match background color */
+  background-color: #1d6485ea; 
   color: #ffffff;
   border: 2px solid #204b64;
   padding: 10px 15px;
@@ -234,6 +233,59 @@ textarea:focus {
   background: #aaa;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Confirmation dialog styles (used when submitting without a rating) */
+.confirm-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002; /* above popup-overlay content */
+  pointer-events: auto;
+}
+
+.confirm-box {
+  width: 360px;
+  max-width: 92%;
+  background: #ffffff;
+  color: #1f2d33;
+  border-radius: 12px;
+  padding: 16px 18px;
+  position: relative;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+  text-align: left;
+}
+
+.confirm-box h4 {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  color: #0b3346;
+}
+
+.confirm-box .confirm-desc {
+  margin: 0 0 12px 0;
+  color: #34414a;
+  font-size: 14px;
+}
+
+.confirm-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: #0b3346;
+  cursor: pointer;
+}
+
+.confirm-close:hover {
+  color: #1a5a58;
 }
 
 /* Responsive design */
