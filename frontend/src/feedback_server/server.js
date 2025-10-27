@@ -51,7 +51,7 @@ const pool = new Pool({
   user: "postgres",
   host: "localhost",
   database: "feedbackdb",
-  password: "hds19735",
+  password: "1234",
   port: 5432,
 });
 

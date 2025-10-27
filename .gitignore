@@ -19,3 +19,10 @@ node_modules/.vite/**
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# .js files
+backend_heatmap/backend/heatmap_db.js
+frontend/src/feedback_server/server.js
+backend_notifications/package-lock.json
+frontend/src/feedback_server/feedbacks.csv
+
