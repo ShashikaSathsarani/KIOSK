@@ -9,6 +9,7 @@ import IntroVideo from './components/IntroVideo'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import ExhibitsPage from './components/ExhibitsPage'
+import FeedbackPopup from './components/FeedbackPopup'
 import './App.css'
 
 function App() {
@@ -120,6 +121,8 @@ function App() {
         {/* Scrolling Contact Info - only show if NOT home page */}
         <ContactInfo currentPage={currentPage} />
 
+        {/* Feedback button + popup */}
+        <FeedbackPopup />
 
         {/* ===== FOOTER COMPONENT ===== */}
         <Footer />
