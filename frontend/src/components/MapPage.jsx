@@ -4,7 +4,7 @@ import Dashboard from '../map_module/Dashboard';
 
 //import {map, initMap, getRouteToNode, getRouteToBuilding, drawRoute, addBuildingClickListner, getGpsPosition, drawMarker } from "../utils/map_module";  
 
-function MapComponent() {
+function MapPage() {
   return (
     <div className="map-page">
       <div className="map-container">
@@ -14,4 +14,4 @@ function MapComponent() {
   );
 }
 
-export default MapComponent;
+export default MapPage;
