@@ -39,18 +39,54 @@ app.get("/api/notifications", async (req, res) => {
 });
 
 // Add notification manually
+// ...existing code...
 app.post("/api/notifications", async (req, res) => {
+  console.log("=== POST REQUEST DEBUG ===");
+  console.log("Method:", req.method);
+  console.log("URL:", req.url);
+  console.log("Headers:", req.headers);
+  console.log("Body:", req.body);
+  console.log("Body type:", typeof req.body);
+  console.log("Body keys:", Object.keys(req.body || {}));
+  console.log("========================");
+
+  // Check if body is empty or malformed
+  if (!req.body || Object.keys(req.body).length === 0) {
+    console.log("ERROR: Empty body received");
+    return res.status(400).json({ error: "Request body is required" });
+  }
+
   const { title, body, level, data } = req.body;
+
+  // Validate required fields
+  if (!title) {
+    console.log("ERROR: Missing title");
+    return res.status(400).json({ error: "Title is required" });
+  }
+  if (!body) {
+    console.log("ERROR: Missing body");
+    return res.status(400).json({ error: "Body is required" });
+  }
+
   try {
+    const jsonData = data ? JSON.stringify(data) : "{}";
+    console.log("Inserting with jsonData:", jsonData);
+
     const result = await pool.query(
       "INSERT INTO notifications (title, body, level, data) VALUES ($1,$2,$3,$4) RETURNING *",
-      [title, body, level || "info", data || {}]
+      [title, body, level || "info", jsonData]
     );
-    res.json(result.rows[0]);
+
+    console.log("SUCCESS: Notification created");
+    res.status(201).json(result.rows[0]);
   } catch (err) {
+    console.error("DB ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
+
+
+
 
 // Mark notification as read
 app.put("/api/notifications/:id/read", async (req, res) => {
