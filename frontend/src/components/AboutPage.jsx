@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 import "./AboutPage.css";
 import logo from "../assets/engex.png";
 
 const AboutPage = () => {
+  const [departments, setDepartments] = useState([]);
+  const [selectedDept, setSelectedDept] = useState(null);
+  const [deptDetails, setDeptDetails] = useState(null);
   const [currentStat, setCurrentStat] = useState(0);
 
   const eventStats = [
@@ -15,17 +19,6 @@ const AboutPage = () => {
     { label: "Guest Speakers", value: "25", icon: "🎤" }
   ];
 
-  const departments = [
-    { name: "Computer Engineering", description: "AI, Software, Cybersecurity", projects: 18, color: "#3b82f6" },
-    { name: "Electrical Engineering", description: "Power Systems, Renewable Energy, Smart Grids", projects: 16, color: "#f59e0b" },
-    { name: "Mechanical Engineering", description: "Robotics, Manufacturing, Automotive Technology", projects: 15, color: "#10b981" },
-    { name: "Civil Engineering", description: "Infrastructure, Construction, Environmental Engineering", projects: 14, color: "#8b5cf6" },
-    { name: "Chemical & Process Engineering", description: "Process Engineering, Materials Science, Sustainability", projects: 12, color: "#ef4444" },
-    { name: "Manufacturing & Industrial Engineering", description: "Production, Automation, Quality Control", projects: 11, color: "#06b6d4" },
-    { name: "Engineering Management", description: "Project Leadership, Operations Optimization, Tech Management", projects: 11, color: "#d406a7" },
-    { name: "Engineering Mathematics", description: "Computational Methods, Modeling, Data Analysis", projects: 11, color: "#d3d15e" }
-  ];
-
   const highlights = [
     { icon: "🏆", text: "Award Competitions" },
     { icon: "🎯", text: "Interactive Demos" },
@@ -35,12 +28,38 @@ const AboutPage = () => {
     { icon: "🌱", text: "Sustainability Focus" }
   ];
 
+  // Fetch departments from backend
+  useEffect(() => {
+    axios.get("http://localhost:5000/departments")
+      .then(res => setDepartments(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
+  // Automatic stat rotation
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentStat((prev) => (prev + 1) % eventStats.length);
+      setCurrentStat(prev => (prev + 1) % eventStats.length);
     }, 3000);
     return () => clearInterval(interval);
   }, [eventStats.length]);
+
+  // Fetch single department details for modal
+  const handleDeptClick = (id) => {
+    axios.get(`http://localhost:5000/departments/${id}`)
+      .then(res => {
+        setDeptDetails(res.data);
+        setSelectedDept(id);
+      })
+      .catch(err => console.error(err));
+  };
+
+  // Dynamic gradient and border for modal header
+  const linearGradient = deptDetails 
+    ? `linear-gradient(${deptDetails.color}, white)` 
+    : "linear-gradient(yellow, white)";
+  const borderColor = deptDetails 
+    ? `5px solid ${deptDetails.color}` 
+    : "5px solid #3b82f6";
 
   return (
     <div className="about-page">
@@ -70,7 +89,7 @@ const AboutPage = () => {
           </div>
         </motion.div>
 
-        {/* Event Overview */}
+        {/* Event Overview & Highlights */}
         <motion.div 
           className="glass-card"
           initial={{ opacity: 0, y: 40 }}
@@ -91,15 +110,12 @@ const AboutPage = () => {
               </p>
             </div>
 
-            {/* Highlights Grid */}
+            {/* Highlights */}
             <motion.div 
               className="highlights-main-grid"
               initial="hidden"
               whileInView="visible"
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.15 } }
-              }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}
             >
               {highlights.map((item, i) => (
                 <motion.div 
@@ -144,25 +160,65 @@ const AboutPage = () => {
           </div>
         </motion.div>
 
-        {/* Departments */}
+        {/* Departments Grid */}
         <div className="glass-card">
           <h2 className="section-title">🏛️ Engineering Departments</h2>
           <div className="departments-grid">
-            {departments.map((dept, i) => (
-              <motion.div 
-                key={i} 
-                className="department-card"
-                whileHover={{ scale: 1.08, y: -5 }}
-                transition={{ type: "spring", stiffness: 150 }}
-                style={{ borderLeft: `5px solid ${dept.color}` }}
-              >
-                <h3 className="department-name">{dept.name}</h3>
-                <span className="department-projects">{dept.projects} projects</span>
-                <p className="department-description">{dept.description}</p>
-              </motion.div>
+            {departments.map((dept) => (
+              <div key={dept.id} className="department-card-wrapper">
+                <motion.div 
+                  className="department-card"
+                  whileHover={{ scale: 1.08, y: -3 }}
+                  transition={{ type: "spring", stiffness: 150 }}
+                  style={{ borderLeft: `5px solid ${dept.color}` }}
+                  onClick={() => handleDeptClick(dept.id)}
+                >
+                  <h3 className="department-name">{dept.name}</h3>
+                  <span className="department-projects">{dept.projects} projects</span>
+                  <p className="department-description">{dept.description}</p>
+                </motion.div>
+              </div>
             ))}
           </div>
         </div>
+
+        {/* Department Modal */}
+        <AnimatePresence>
+          {selectedDept && deptDetails && (
+            <motion.div
+              className="department-modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedDept(null)}
+            >
+              <motion.div
+                className="department-modal"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                style={{ borderLeft: borderColor }}
+              >
+                <div className="modal-header" style={{ background: linearGradient }}>
+                  <h3>{deptDetails.name}</h3>
+                </div>
+                <div className="modal-body">
+                  <p><b>Head of Department:</b> {deptDetails.head }</p>
+                  
+                  <p><b>Number of Projects:</b> {deptDetails.projects}</p>
+                  
+                  <p><b>Projects: </b></p>
+                  <ul>
+                    {deptDetails.description.split(",").map((item, index) => (
+                      <li key={index}>{item.trim()}</li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Quick Stats */}
         <div className="quick-stats-grid">

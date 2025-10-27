@@ -1,0 +1,15 @@
+{
+  "name": "backend_aboutpage",
+  "version": "1.0.0",
+  "description": "Backend for About Page",
+  "main": "AboutPageServer.js",
+  "type": "module",
+  "scripts": {
+    "start": "node AboutPageServer.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.3.0",
+    "cors": "^2.8.5"
+  }
+}
