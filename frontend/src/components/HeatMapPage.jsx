@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'; // Import React and hooks (currently not used)
+import React, { useEffect, useRef, useState } from 'react'; // Import React and hooks
 import './HeatMapPage.css'; // Import CSS for styling this page
 import SvgHeatmap from '../Heatmap/SvgHeatmap'; // Import the heatmap component
 
@@ -6,7 +6,6 @@ import SvgHeatmap from '../Heatmap/SvgHeatmap'; // Import the heatmap component
 function HeatMapPage() {
   return (
     // Outer container for the page
-    // NOTE: className "h2" is a bit confusing; it's better to rename to something like "heatmap-page"
     <div className="h2">
       
       {/* Page heading */}
