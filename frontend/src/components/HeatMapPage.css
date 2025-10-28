@@ -1,34 +1,56 @@
- h2 {
-  padding: 2rem; 
-  background-color: transparent; 
-  border-radius: 1.5rem; 
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); 
-  backdrop-filter: blur(16px); 
-  border: 1px solid rgba(255, 255, 255, 0.18); 
-  max-width: 80rem; 
-  margin-left: auto; 
-  margin-right: auto; 
- }
+/* ---------------------------
+   Heading Styling (h2)
+---------------------------- */
+h2 {
+  padding: 2rem; /* Space inside the heading for breathing room */
+  background-color: transparent; /* No background color, allows backdrop effect */
+  border-radius: 1.5rem; /* Rounded corners for smooth look */
+  
+  /* Shadow and blur effect for "glassmorphism" */
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); /* Soft, deep shadow */
+  backdrop-filter: blur(16px); /* Blur the background behind the element */
+  
+  /* Semi-transparent border for a glass-like edge */
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  
+  max-width: 80rem; /* Limits width for very large screens */
+  
+  /* Center the heading horizontally */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------------------------
+   Heatmap Container Styling
+---------------------------- */
 .heatmap-container {
-  text-align: center;         
-  color: #ffffff;             
-  font-size: 2rem;         
-  line-height: 2rem;
-  font-weight: 700;           
-  margin-bottom: 2rem;        
+  text-align: center; /* Center text inside container */
+  color: #ffffff; /* White text for contrast on dark backgrounds */
+  font-size: 2rem; /* Large, readable font */
+  line-height: 2rem; /* Tight line spacing */
+  font-weight: 700; /* Bold text for emphasis */
+  margin-bottom: 2rem; /* Space below container */
+  
+  /* Soft shadow effect for better text visibility */
   filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04))
-          drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1)); 
+          drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
 }
 
+/* ---------------------------
+   Heatmap Iframe Wrapper
+---------------------------- */
 .heatmap-iframe-wrapper {
-  margin-top: 1.5rem; 
-  border-radius: 1rem; 
-  overflow: hidden; 
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15); 
+  margin-top: 1.5rem; /* Space above iframe */
+  border-radius: 1rem; /* Rounded corners */
+  overflow: hidden; /* Clips content, important for rounded corners */
+  
+  /* Shadow for depth, makes the iframe pop */
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
 }
 
+/* ---------------------------
+   Utility Class for Margin Bottom
+---------------------------- */
 .mb-8 {
-  margin-bottom: 2rem;
+  margin-bottom: 2rem; /* Standard bottom spacing utility */
 }
-
-

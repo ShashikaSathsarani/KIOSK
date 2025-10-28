@@ -1,75 +1,88 @@
+/* ---------------------------
+   Notifications Page Container
+---------------------------- */
 .notifications-page {
-  padding: 40px 20px;
-  background: #123960; /* deep blue background */
-  color: white;
-  min-height: 200vh;
-  font-family: 'Segoe UI', sans-serif;
+  padding: 40px 20px; /* Top-bottom: 40px, Left-right: 20px spacing */
+  background: #123960; /* Deep blue background for the page */
+  color: white; /* Default text color for readability on dark background */
+  min-height: 200vh; /* Makes the page double the viewport height */
+  font-family: 'Segoe UI', sans-serif; /* Modern, clean font */
 
-  /* Center notifications nicely */
+  /* Flexbox to center content vertically and horizontally */
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* Stack children (notifications) vertically */
+  align-items: center; /* Center notifications horizontally */
 }
 
 .notifications-page h2 {
-  margin-bottom: 25px;
-  text-align: center;
-  font-size: 3rem;
-  font-weight: 500;
-  border: 0;
+  margin-bottom: 25px; /* Space below the heading */
+  text-align: center; /* Center-align heading text */
+  font-size: 3rem; /* Large heading size */
+  font-weight: 500; /* Medium font weight */
+  border: 0; /* Removes default border if any */
 }
 
-/* Notification card */
+/* ---------------------------
+   Individual Notification Card
+---------------------------- */
 .notification {
-  background: rgba(255, 255, 255, 0.12);
-  padding: 15px 20px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  border-left: 5px solid #2196f3;
-  transition: all 0.25s ease;
-  width: 100%;
-  max-width: 1200px;   /* consistent width */
-  min-height: 120px;  /* equal height */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.12); /* Semi-transparent white for card */
+  padding: 15px 20px; /* Inner spacing for content */
+  margin-bottom: 20px; /* Space between notifications */
+  border-radius: 12px; /* Rounded corners */
+  border-left: 5px solid #2196f3; /* Left color strip to indicate type */
+  transition: all 0.25s ease; /* Smooth hover animations */
+  width: 100%; /* Full width within container */
+  max-width: 1200px; /* Prevent card from being too wide on large screens */
+  min-height: 120px; /* Ensure all notifications have equal height */
+  display: flex; /* Flex container for card content */
+  flex-direction: column; /* Stack title, message, and footer vertically */
+  justify-content: space-between; /* Evenly space content top to bottom */
 
-  /* Soft card shadow */
+  /* Soft shadow for depth */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Hover effect to make cards pop */
 .notification:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transform: translateY(-4px); /* Slightly lift the card */
+  background: rgba(255, 255, 255, 0.18); /* Slightly brighter background */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); /* Deeper shadow */
 }
 
-/* Type colors */
-.notification.info { border-left-color: #2196f3; }
-.notification.warning { border-left-color: #ff9800; }
-.notification.error { border-left-color: #f44336; }
+/* ---------------------------
+   Notification Type Colors
+---------------------------- */
+.notification.info { border-left-color: #2196f3; }    /* Blue for info */
+.notification.warning { border-left-color: #ff9800; } /* Orange for warning */
+.notification.error { border-left-color: #f44336; }   /* Red for error */
 
-/* Header styling */
+/* ---------------------------
+   Notification Header Styling
+---------------------------- */
 .notif-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; /* Flexbox for header */
+  justify-content: space-between; /* Space between title and close/time */
+  align-items: center; /* Vertically center header items */
 }
 
+/* Title of the notification */
 .notification h3 {
-  font-size: 1.1rem;
-  margin: 0 0 6px 0;
-  font-weight: 600;
+  font-size: 1.1rem; /* Slightly larger text */
+  margin: 0 0 6px 0; /* Bottom spacing between title and message */
+  font-weight: 600; /* Bold title */
 }
 
+/* Notification message/body */
 .notification p {
-  font-size: 1.5rem;
-  margin: 5px 0;
-  flex-grow: 1;
+  font-size: 1.5rem; /* Large readable message text */
+  margin: 5px 0; /* Small vertical spacing */
+  flex-grow: 1; /* Makes message take up available space if needed */
 }
 
+/* Small metadata (timestamp or info) */
 .notification small {
-  opacity: 0.8;
-  font-size: 0.8rem;
-  text-align: right;
+  opacity: 0.8; /* Slightly faded */
+  font-size: 0.8rem; /* Smaller text */
+  text-align: right; /* Align right in card */
 }
