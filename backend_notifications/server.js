@@ -99,6 +99,29 @@ app.put("/api/notifications/:id/read", async (req, res) => {
   }
 });
 
+// ------------------- DELETE NOTIFICATION -------------------
+
+// Delete a specific notification by ID
+app.delete("/api/notifications/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      "DELETE FROM notifications WHERE id = $1 RETURNING *",
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Notification not found" });
+    }
+
+    res.json({ message: "Notification deleted", deleted: result.rows[0] });
+  } catch (err) {
+    console.error("Error deleting notification:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // ------------------- EVENT-BASED NOTIFICATIONS -------------------
 
 async function createNotificationsFromEvents() {
