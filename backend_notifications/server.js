@@ -5,7 +5,7 @@ import dotenv from "dotenv";    //For loading environment variables from a .env 
 import pkg from "pg";           //PostgreSQL client for Node.js
 import fetch from "node-fetch"; //Used to make API requests (for event fetching)
 
-// Load environment variables
+//Load environment variables
 dotenv.config();
 const { Pool } = pkg; //Extract Pool class from pg package
 
@@ -141,7 +141,7 @@ async function createNotificationsFromEvents() {
     const events = await response.json();
 
     const now = new Date(); // Current time
-    const tenMinutesLater = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes from now
+    const tenMinutesLater = new Date(now.getTime() + 30 * 60 * 1000); // 10 minutes from now
 
     // Iterate through each event
     for (const event of events) {
@@ -158,7 +158,21 @@ async function createNotificationsFromEvents() {
         // If no existing notification, create one
         if (exists.rows.length === 0) {
           const title = `Upcoming Event: ${event.event_title}`;
-          const body = `Event starts at ${start.toLocaleTimeString()}`;
+
+          // Compute remaining time until event start (for a friendlier message)
+          const diffMs = start.getTime() - now.getTime();
+          const minutes = Math.max(0, Math.floor(diffMs / (60 * 1000))); // whole minutes
+          const seconds = Math.max(0, Math.floor((diffMs % (60 * 1000)) / 1000)); // leftover seconds
+
+          // Format time: "in X minutes" or "in Y seconds" when < 1 minute
+          const humanEta = minutes > 0
+            ? `${minutes} minute${minutes === 1 ? '' : 's'}`
+            : `${seconds} second${seconds === 1 ? '' : 's'}`;
+
+          // Include absolute time as well for clarity
+          const timeStr = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const where = event.location || 'the venue';
+          const body = `${event.event_title} starts at ${timeStr} (${humanEta} from now) at ${where}.`;
           const expiresAt = start; // Notification expires when event starts
 
           // Insert new notification

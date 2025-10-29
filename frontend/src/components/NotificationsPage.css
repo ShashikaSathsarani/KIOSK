@@ -53,7 +53,7 @@
 /* ---------------------------
    Notification Type Colors
 ---------------------------- */
-.notification.info { border-left-color: #2196f3; }    /* Blue for info */
+.notification.info { border-left-color: green; }    /* Blue for info */
 .notification.warning { border-left-color: #ff9800; } /* Orange for warning */
 .notification.error { border-left-color: #f44336; }   /* Red for error */
 

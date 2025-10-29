@@ -1,6 +1,6 @@
 //Import React and required hooks
 import React, { useEffect, useState } from "react"; //useState: to manage component state
-                                                    // useEffect: to run side effects(like fetching data) after render
+// useEffect: to run side effects(like fetching data) after render
 
 //Import CSS styles for this component
 import "./NotificationsPage.css";
@@ -12,6 +12,9 @@ const NotificationsPage = () => {
 
   //show a loading state until data arrives
   const [loading, setLoading] = useState(true);
+
+  // Ticker to re-render every second for live countdowns
+  const [nowTs, setNowTs] = useState(Date.now());
 
   //Runs a side effect after the first render
   useEffect(() => {
@@ -36,6 +39,29 @@ const NotificationsPage = () => {
     return () => clearInterval(interval);
   }, []); // Empty dependency array => runs only once on mount
 
+  // Set up a 1-second ticker for live countdown rendering
+  useEffect(() => {
+    const t = setInterval(() => setNowTs(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Helper: render remaining time until notification expiry (event start)
+  const renderCountdown = (n) => {
+    if (!n?.expires_at) return null; // Only show for event-based notifications
+    const end = new Date(n.expires_at).getTime();
+    if (Number.isNaN(end)) return null;
+
+    const diff = end - nowTs;
+    if (diff <= 0) return <small className="countdown">Starting now</small>;
+
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    const label = minutes > 0
+      ? `Starts in ${minutes}m ${String(seconds).padStart(2, "0")}s`
+      : `Starts in ${seconds}s`;
+    return <small className="countdown">{label}</small>;
+  };
+
   // If still loading, display a simple "Loading..." message
   if (loading) return <div className="notifications-page">Loading...</div>;
 
@@ -50,7 +76,10 @@ const NotificationsPage = () => {
             {/* Notification header with title and timestamp */}
             <div className="notif-header">
               <h3>{n.title}</h3>
-              <small>{new Date(n.created_at).toLocaleString()}</small>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <small>{new Date(n.created_at).toLocaleString()}</small>
+                {renderCountdown(n)}
+              </div>
             </div>
 
             {/* Notification body text */}
