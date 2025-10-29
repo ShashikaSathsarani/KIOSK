@@ -7,20 +7,20 @@ import fetch from "node-fetch"; //Used to make API requests (for event fetching)
 
 // Load environment variables
 dotenv.config();
-const { Pool } = pkg; // Extract Pool class from pg package
+const { Pool } = pkg; //Extract Pool class from pg package
 
-// Initialize express app
+//Initialize express app
 const app = express();
-app.use(cors()); // Enable CORS
-app.use(express.json()); // Parse JSON bodies in incoming requests
+app.use(cors()); //Enable CORS
+app.use(express.json()); //Parse JSON bodies in incoming requests
 
 // ---------------- PostgreSQL connection setup ----------------
 const pool = new Pool({
-  user: process.env.PG_USER, // Database username
-  host: process.env.PG_HOST, // Database host (e.g., localhost)
-  database: process.env.PG_DATABASE, // Database name
-  password: process.env.PG_PASSWORD, // Database password
-  port: process.env.PG_PORT, // Database port (usually 5432)
+  user: process.env.PG_USER, //Database username
+  host: process.env.PG_HOST, //Database host (e.g., localhost)
+  database: process.env.PG_DATABASE, //Database name
+  password: process.env.PG_PASSWORD, //Database password
+  port: process.env.PG_PORT, //Database port (usually 5432)
 });
 
 // Event API base URL (for fetching event data)
@@ -190,7 +190,7 @@ async function cleanupNotifications() {
 
 // ------------------- AUTO POLLING -------------------
 
-// Run event checking and cleanup every 1 minute
+// Run event checking and cleanup every 5 seconds
 setInterval(async () => {
   await createNotificationsFromEvents(); // Generate new notifications
   await cleanupNotifications(); // Remove old ones
