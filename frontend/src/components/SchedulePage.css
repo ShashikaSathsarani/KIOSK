@@ -161,7 +161,7 @@
 
 .event-card {
   position: relative;
-  background: rgba(255,255,255,0.05);
+  background: rgba(234, 129, 129, 0.05);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(59,130,246,0.4);
   border-radius: 1rem;
@@ -251,3 +251,48 @@
     gap: 0.5rem;
   }
 }
+
+.rating-section {
+  margin-top: 0.75rem;
+}
+
+.rating-inputs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.rating-inputs button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.1rem 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.rating-inputs button:hover {
+  transform: scale(1.1);
+}
+
+.active-rating {
+  background: #22c55e !important;
+}
+
+.category-tag{
+  color: rgb(246, 206, 6);
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.avg-rating {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 4px;
+}
+

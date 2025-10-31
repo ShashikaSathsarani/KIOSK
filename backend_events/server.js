@@ -134,5 +134,51 @@ app.get("/api/categories", async (req, res) => {
   }
 });
 
+/**
+ * RATING ROUTES (added; non-destructive)
+ * - POST /api/ratings : add a numeric rating for an event
+ * - GET /api/ratings/:event_id : get average rating for an event
+ *
+ * Note: Does not change any existing routes or queries.
+ */
+
+app.post("/api/ratings", async (req, res) => {
+  const { event_id, rating } = req.body;
+  try {
+    if (!event_id || typeof rating === "undefined") {
+      return res.status(400).json({ error: "Missing event_id or rating" });
+    }
+
+    // Ensure rating is numeric and within 1-5 (you can adjust range as needed)
+    const numericRating = Number(rating);
+    if (Number.isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+      return res.status(400).json({ error: "Rating must be a number between 1 and 5" });
+    }
+
+    await pool.query(
+      "INSERT INTO event_ratings (event_id, rating) VALUES ($1, $2)",
+      [event_id, numericRating]
+    );
+    res.status(201).json({ message: "Rating added successfully" });
+  } catch (err) {
+    console.error("Error adding rating:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/ratings/:event_id", async (req, res) => {
+  const { event_id } = req.params;
+  try {
+    const result = await pool.query(
+      "SELECT COALESCE(ROUND(AVG(rating),2),0) AS avg_rating FROM event_ratings WHERE event_id = $1",
+      [event_id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error fetching rating:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = process.env.PORT || 3036;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

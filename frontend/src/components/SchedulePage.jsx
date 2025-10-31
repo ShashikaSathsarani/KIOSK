@@ -15,6 +15,11 @@ const SchedulePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [categories, setCategories] = useState([])
 
+  // NEW: store fetched average ratings per event_id
+  const [avgRatings, setAvgRatings] = useState({}) // { [event_id]: avg_rating }
+  // NEW: store user's submitted rating in current session (so UI shows selection)
+  const [sessionRatings, setSessionRatings] = useState({}) // { [event_id]: number }
+
   // Fetch events and categories
   useEffect(() => {
     const fetchData = async () => {
@@ -25,12 +30,39 @@ const SchedulePage = () => {
         const categoryData = await getAllCategories() // id, category_name, description
         setAllEvents(eventsData)
         setCategories(categoryData)
+
+        // After we get events, fetch average ratings for completed events (non-blocking)
+        try {
+          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3036'
+          const completedEvents = (eventsData || []).filter(ev => {
+            const now = new Date()
+            const end = new Date(ev.end_time)
+            return now >= end
+          })
+          // fetch ratings in parallel
+          const promises = completedEvents.map(ev =>
+            fetch(`${apiUrl}/api/ratings/${ev.event_id}`).then(r => {
+              if (!r.ok) return { event_id: ev.event_id, avg_rating: 0 }
+              return r.json().then(data => ({ event_id: ev.event_id, avg_rating: data.avg_rating ?? 0 }))
+            }).catch(() => ({ event_id: ev.event_id, avg_rating: 0 }))
+          )
+          const ratingsArr = await Promise.all(promises)
+          const ratingsMap = {}
+          ratingsArr.forEach(r => { ratingsMap[r.event_id] = r.avg_rating })
+          setAvgRatings(prev => ({ ...prev, ...ratingsMap }))
+        } catch (err) {
+          console.warn("Failed to fetch ratings for events:", err)
+          // non-fatal — we still show events
+        }
       } catch (err) {
         setError('Failed to fetch data: ' + err.message)
       } finally {
         setLoading(false)
       }
+
+      
     }
+
     fetchData()
     const interval = setInterval(fetchData, 60000) // Refresh every 1 min
     return () => clearInterval(interval)
@@ -56,6 +88,7 @@ const SchedulePage = () => {
 
   const formatDuration = (start, end) => `${formatTime(start)} - ${formatTime(end)}`
 
+  //Highlighting matches in the display
   const highlight = (text, term) => {
     if (!term || !term.trim()) return text
     const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
@@ -79,6 +112,7 @@ const SchedulePage = () => {
     return Array.from(catSet).sort()
   }
 
+  //when u click X serchQuery becomes empty
   const clearSearch = () => setSearchQuery('')
 
   const getDisplayEvents = () => {
@@ -122,8 +156,10 @@ const SchedulePage = () => {
     return filtered.slice().sort((a, b) => getStatusOrder(a) - getStatusOrder(b))
   }
 
+  //filtering recalculated only when needed
   const displayEvents = useMemo(() => getDisplayEvents(), [allEvents, searchQuery, selectedCategory, filterStatus])
 
+  //Compute the numbers
   useEffect(() => {
     if (searchQuery.trim()) setSearchResults(displayEvents.length)
     else setSearchResults(0)
@@ -144,6 +180,44 @@ const SchedulePage = () => {
       case 'upcoming': return "UPCOMING"
       case 'completed': return "COMPLETED"
       default: return "UNKNOWN"
+    }
+  }
+
+  // NEW: submit numeric rating (1-5)
+  const handleRating = async (eventId, rating) => {
+    try {
+      if (!eventId) return
+      const numeric = Number(rating)
+      if (Number.isNaN(numeric) || numeric < 1 || numeric > 5) {
+        alert("Please select a rating between 1 and 5")
+        return
+      }
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3036'
+      const res = await fetch(`${apiUrl}/api/ratings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event_id: eventId, rating: numeric })
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(()=>null)
+        throw new Error(err?.error || "Failed to submit rating")
+      }
+      // update session rating so UI reflects user's click
+      setSessionRatings(prev => ({ ...prev, [eventId]: numeric }))
+      // refresh avg rating for that event
+      try {
+        const r = await fetch(`${apiUrl}/api/ratings/${eventId}`)
+        if (r.ok) {
+          const data = await r.json()
+          setAvgRatings(prev => ({ ...prev, [eventId]: data.avg_rating ?? 0 }))
+        }
+      } catch (e) {
+        // ignore — non-critical
+      }
+      alert("Thanks for rating!")
+    } catch (err) {
+      console.error(err)
+      alert("Failed to submit rating")
     }
   }
 
@@ -179,6 +253,7 @@ const SchedulePage = () => {
             </div>
           </div>
 
+          {/*Shows found X events or No found events*/}
           {searchQuery && (
             <div className="search-info">
               {searchResults > 0
@@ -187,13 +262,14 @@ const SchedulePage = () => {
             </div>
           )}
 
+          {/* Status Filter Buttons */}
           <div className="filter-buttons">
             {['all', 'ongoing', 'upcoming', 'completed'].map(s => (
               <button
                 key={s}
                 className={filterStatus === s ? 'active' : ''}
                 onClick={() => setFilterStatus(s)}
-                aria-pressed={filterStatus === s}
+                aria-pressed={filterStatus === s}  //tells whether a button is currently "pressed"
               >
                 {s === 'all' ? 'All Events' : s.charAt(0).toUpperCase() + s.slice(1)}
               </button>
@@ -256,6 +332,26 @@ const SchedulePage = () => {
                         <span>{highlight(formatTime(event.start_time), searchQuery)}</span>
                       </div>
                     </div>
+
+                    {/* NEW: show rating UI for completed events only, preserving everything else */}
+                    {status === 'completed' && (
+                      <div className="rating-section">
+                        <div className="category-tag">Rate this event : </div>
+                        <div className="rating-inputs">
+                          {[1,2,3,4,5].map(n => (
+                            <button
+                              key={n}
+                              onClick={() => handleRating(event.event_id, n)}
+                              className={sessionRatings[event.event_id] === n ? 'active-rating' : ''}
+                              aria-label={`Rate ${n} for ${event.event_title}`}
+                            >
+                              {n}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                   </div>
                 </div>
               )
