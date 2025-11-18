@@ -5,7 +5,7 @@ import "./FeedbackPopup.css";
 // If user clicks Submit without selecting a star, a small message asks them to pick one.
 // After successful submit it will show a thank-you box.
 
-const FeedbackPopup = ({ showOnPages = true, currentPage }) => {
+const FeedbackPopup = ({ showOnPages = true }) => {
   // Open/close popup
   const [open, setOpen] = useState(false);
 
@@ -25,8 +25,8 @@ const FeedbackPopup = ({ showOnPages = true, currentPage }) => {
   // Show a small prompt when user tries to submit without picking a star
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Hide on ChatBot page (index 7) or if parent asked not to show
-  if (!showOnPages || currentPage === 7) return null;
+  // If the parent asked us not to show the feedback button, render nothing
+  if (!showOnPages) return null;
 
   // Send feedback to backend. Kept simple and separated so it's easy to read.
   const submitFeedback = async () => {
