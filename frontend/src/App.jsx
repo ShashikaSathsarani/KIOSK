@@ -10,13 +10,15 @@ import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import ExhibitsPage from './components/ExhibitsPage'
 import FeedbackPopup from './components/FeedbackPopup'
+import ChatBotPage from './chatbot/ChatBotPage'
+import { Bot } from 'lucide-react'
 import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState(0)
   const [showIntroVideo, setShowIntroVideo] = useState(true)
   const inactivityTimerRef = useRef(null)
-  const pages = [HomePage, AboutPage, SchedulePage, ExhibitsPage, NotificationsPage, MapPage, HeatMapPage]
+  const pages = [HomePage, AboutPage, SchedulePage, ExhibitsPage, NotificationsPage, MapPage, HeatMapPage, ChatBotPage]
 
   // Handle user activity to reset inactivity timer
   const handleUserActivity = useCallback(() => {
@@ -84,7 +86,8 @@ function App() {
   const CurrentComponent = pages[currentPage]
   // Contact info component (kept inside App to access currentPage)
   const ContactInfo = ({ currentPage }) => {
-    if (currentPage === 0) return null
+    // Hide on home page (0) and ChatBot page (7)
+    if (currentPage === 0 || currentPage === 7) return null
 
     return (
       <div className="contact-container">
@@ -121,12 +124,24 @@ function App() {
         {/* Scrolling Contact Info - only show if NOT home page */}
         <ContactInfo currentPage={currentPage} />
 
-        {/* Feedback button + popup */}
-        <FeedbackPopup />
+        {/* Feedback button + popup - hide on ChatBot page */}
+        <FeedbackPopup currentPage={currentPage} />
 
         {/* ===== FOOTER COMPONENT ===== */}
         <Footer />
       </div>
+      
+      {/* Floating ChatBot Button - Fixed position like Rate Us button */}
+      {currentPage !== 7 && (
+        <button
+          onClick={() => handlePageClick(7)}
+          className="chatbot-button-modern"
+          aria-label="Open AI ChatBot"
+        >
+          <Bot size={28} />
+          <span className="chatbot-button-tooltip">Chat with EngExAI</span>
+        </button>
+      )}
     </div>
   )
 }
