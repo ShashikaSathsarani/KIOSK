@@ -1,7 +1,7 @@
 .feedback-btn {
   position: fixed;
-  top: 20px;
-  right: 110px;
+  bottom: calc(10px + 45px + 8px + 65px + 10px + 15px); /* footer + contact + gap + spacing + chatbot button + gap */
+  right: 45px;
   background-color: #1d6485ea; 
   color: #ffffff;
   border: 2px solid #204b64;

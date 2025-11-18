@@ -16,10 +16,10 @@ const Navigation = ({ currentPage, onPageClick, pages }) => {
   // State for real-time clock
   const [currentTime, setCurrentTime] = useState(new Date())
   
-  // Page names corresponding to the components (removed Trending)
-  const pageNames = ['Home', 'About', 'Events', 'Exhibits', 'Notifications', 'Map', 'Heat Map']
+  // Page names corresponding to the components (added ChatBot)
+  const pageNames = ['Home', 'About', 'Events', 'Exhibits', 'Notifications', 'Map', 'Heat Map', 'ChatBot']
   // Optional: Page icons (updated to include notification icon)
-  // const pageIcons = ['🏠', '📅', '🔥', 'ℹ️', '🗺️', '📞', '🔔']
+  // const pageIcons = ['🏠', '📅', '🔥', 'ℹ️', '🗺️', '📞', '🔔', '🤖']
   
   // Update time every second
   useEffect(() => {
