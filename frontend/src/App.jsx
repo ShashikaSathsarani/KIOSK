@@ -11,14 +11,25 @@ import Footer from './components/Footer'
 import ExhibitsPage from './components/ExhibitsPage'
 import FeedbackPopup from './components/FeedbackPopup'
 import ChatBotPage from './chatbot/ChatBotPage'
+import AdminNotificationsForm from './components/AdminNotificationsForm'
 import { Bot } from 'lucide-react'
 import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState(0)
   const [showIntroVideo, setShowIntroVideo] = useState(true)
+  const [isAdminMode, setIsAdminMode] = useState(false)
   const inactivityTimerRef = useRef(null)
   const pages = [HomePage, AboutPage, SchedulePage, ExhibitsPage, NotificationsPage, MapPage, HeatMapPage, ChatBotPage]
+
+  // Check for admin mode on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('admin') === 'true') {
+      setIsAdminMode(true)
+      setShowIntroVideo(false)
+    }
+  }, [])
 
   // Handle user activity to reset inactivity timer
   const handleUserActivity = useCallback(() => {
@@ -26,7 +37,7 @@ function App() {
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current)
     }
-    
+
     // Set new timer for 20 seconds
     if (!showIntroVideo) {
       inactivityTimerRef.current = setTimeout(() => {
@@ -52,7 +63,7 @@ function App() {
   // Set up global activity listeners
   useEffect(() => {
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click']
-    
+
     const addEventListeners = () => {
       events.forEach(event => {
         document.addEventListener(event, handleUserActivity, true)
@@ -106,10 +117,31 @@ function App() {
     return <IntroVideo onVideoClick={handleIntroVideoClick} />
   }
 
+  // Show admin panel if in admin mode
+  if (isAdminMode) {
+    return (
+      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1>KIOSK Admin Panel</h1>
+          <button
+            onClick={() => {
+              setIsAdminMode(false)
+              window.history.pushState({}, '', '/')
+            }}
+            style={{ padding: '10px 20px', cursor: 'pointer' }}
+          >
+            Exit Admin Mode
+          </button>
+        </div>
+        <AdminNotificationsForm />
+      </div>
+    )
+  }
+
   return (
     <div className="app">
       {/* ===== NAVIGATION COMPONENT ===== */}
-      <Navigation 
+      <Navigation
         currentPage={currentPage}
         onPageClick={handlePageClick}
         pages={pages}
@@ -120,7 +152,7 @@ function App() {
         <div className="page-container">
           <CurrentComponent />
         </div>
-        
+
         {/* Scrolling Contact Info - only show if NOT home page */}
         <ContactInfo currentPage={currentPage} />
 
@@ -130,7 +162,7 @@ function App() {
         {/* ===== FOOTER COMPONENT ===== */}
         <Footer />
       </div>
-      
+
       {/* Floating ChatBot Button - Fixed position like Rate Us button */}
       {currentPage !== 7 && (
         <button

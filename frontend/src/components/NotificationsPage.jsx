@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react"; //useState: to manage compon
 //Import CSS styles for this component
 import "./NotificationsPage.css";
 
+
 //Define the NotificationsPage component
 const NotificationsPage = () => {
   //Creates state to store the list of notifications(initially an empty array)
