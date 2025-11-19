@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS heatmap_db;
 CREATE DATABASE heatmap_db;
 
 \c heatmap_db;

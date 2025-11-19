@@ -1,7 +1,7 @@
 -- ============================================================
 -- Notifications Database Setup Script
 -- ============================================================
-
+DROP DATABASE IF EXISTS kiosk_notifications;
 CREATE DATABASE kiosk_notifications;
 
 \c kiosk_notifications;
@@ -22,4 +22,4 @@ VALUES
 ('Warning', 'Server CPU usage is high.', 'warning', '{"server":"kiosk-main"}'),
 ('Error', 'Database connection lost temporarily.', 'error', '{"service":"backend_notifications"}');
 
-SELECT * FROM public.notifications;
+
