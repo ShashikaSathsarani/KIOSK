@@ -33,7 +33,7 @@ const SchedulePage = () => {
 
         // After we get events, fetch average ratings for completed events (non-blocking)
         try {
-          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3036'
+          const apiUrl = 'http://localhost:3036'
           const completedEvents = (eventsData || []).filter(ev => {
             const now = new Date()
             const end = new Date(ev.end_time)
@@ -192,7 +192,7 @@ const SchedulePage = () => {
         alert("Please select a rating between 1 and 5")
         return
       }
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3036'
+      const apiUrl = 'http://localhost:3036'
       const res = await fetch(`${apiUrl}/api/ratings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -4,7 +4,7 @@
 export async function getAllEvents() {
   try {
     // API URL (fallback to localhost if VITE_API_URL not defined)
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3036';
+    const apiUrl = 'http://localhost:3036';
     const response = await fetch(`${apiUrl}/api/events`);
     
     if (!response.ok) {
