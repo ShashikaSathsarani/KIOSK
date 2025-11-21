@@ -141,7 +141,7 @@ async function createNotificationsFromEvents() {
     const events = await response.json();
 
     const now = new Date(); // Current time
-    const tenMinutesLater = new Date(now.getTime() + 30 * 60 * 1000); // 10 minutes from now
+    const tenMinutesLater = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes from now
 
     // Iterate through each event
     for (const event of events) {
